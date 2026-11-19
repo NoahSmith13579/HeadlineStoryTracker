@@ -9,6 +9,7 @@ requires-python = ">=3.11,<3.15"
 dependencies = [
   "feedparser==6.0.12",
   "httpx==0.28.1",
+  "langdetect==1.0.9",
   "pydantic==2.12.5",
   "PyYAML==6.0.3",
 ]

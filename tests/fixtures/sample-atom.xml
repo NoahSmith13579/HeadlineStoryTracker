@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Fixture Atom</title>
+  <entry>
+    <title>LIVE: City opens a new station</title>
+    <link href="https://example.com/atom/1?fbclid=abc"/>
+    <updated>2026-11-19T16:00:00Z</updated>
+  </entry>
+</feed>
