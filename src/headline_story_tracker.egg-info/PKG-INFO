@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: headline-story-tracker
+Version: 0.1.0
+Requires-Python: <3.15,>=3.11
+Requires-Dist: feedparser==6.0.12
+Requires-Dist: httpx==0.28.1
+Requires-Dist: pydantic==2.12.5
+Requires-Dist: PyYAML==6.0.3

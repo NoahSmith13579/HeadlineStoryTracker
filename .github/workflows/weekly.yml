@@ -1,0 +1,17 @@
+name: Weekly evaluation
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 12 * * 0"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m hst eval
