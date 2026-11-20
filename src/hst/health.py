@@ -28,7 +28,7 @@ def write_health(
         run={
             "duration_s": duration_s,
             "n_new_headlines": n_new_headlines,
-            "n_feeds_ok": sum(feed.status == "ok" for feed in feed_models),
+            "n_feeds_ok": sum(feed.status in ("ok", "not_modified") for feed in feed_models),
             "n_feeds_total": len(feed_models),
         },
         feeds=feed_models,

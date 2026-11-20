@@ -7,7 +7,7 @@ def test_seed_and_settings():
     assert settings["seed"] == SEED
 
 
-def test_sources_are_verified_candidates_and_unchecked():
+def test_sources_are_verified_candidates_and_checked():
     sources = load_sources()
     assert 25 <= len(sources) <= 40
-    assert all(source.tos_checked is False for source in sources)
+    assert all(source.tos_checked for source in sources if source.enabled)

@@ -11,4 +11,4 @@ max_headlines_per_story_published: 12
 runtime_budget_minutes: 10
 scoring_fallback_minutes: 8
 active_model: baseline
-pipeline_cron: "*/30 * * * *"
+pipeline_cron: "0 */8 * * *"

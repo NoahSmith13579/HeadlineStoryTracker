@@ -9,7 +9,14 @@
   <body>
     <main>
       <h1>Headline Story Tracker</h1>
-      <p>Placeholder site. The live pipeline is under construction.</p>
+      <p id="updated">Loading live stories...</p>
+      <div id="health"></div>
+      <div id="stories" aria-live="polite"></div>
+      <dialog id="story-dialog">
+        <button id="close-dialog" type="button">Close</button>
+        <article id="story-detail"></article>
+      </dialog>
     </main>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>

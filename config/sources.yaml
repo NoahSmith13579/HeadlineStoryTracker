@@ -6,7 +6,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: bbc_us
   name: BBC US and Canada
@@ -16,7 +16,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: bbc_politics
   name: BBC Politics
@@ -26,7 +26,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: npr
   name: NPR News
@@ -36,7 +36,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: nyt_home
   name: New York Times
@@ -46,7 +46,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: nyt_world
   name: New York Times World
@@ -56,7 +56,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: guardian_world
   name: The Guardian World
@@ -66,7 +66,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: guardian_us
   name: The Guardian US
@@ -76,7 +76,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: aljazeera
   name: Al Jazeera
@@ -86,7 +86,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: cnn
   name: CNN
@@ -96,7 +96,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: abc
   name: ABC News
@@ -106,7 +106,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: cbs
   name: CBS News
@@ -116,7 +116,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: fox
   name: Fox News
@@ -126,7 +126,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: dw
   name: Deutsche Welle
@@ -136,7 +136,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: france24
   name: France24
@@ -147,7 +147,7 @@
   language: en
   tos_note: ""
   tos_checked: false
-  enabled: true
+  enabled: false
 - id: nbc
   name: NBC News
   feed_url: https://feeds.nbcnews.com/nbcnews/public/news
@@ -156,7 +156,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: pbs
   name: PBS NewsHour
@@ -166,7 +166,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: propublica
   name: ProPublica
@@ -176,7 +176,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: politico
   name: Politico
@@ -186,7 +186,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: thehill
   name: The Hill
@@ -196,7 +196,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: time
   name: Time
@@ -206,7 +206,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: sky_news
   name: Sky News
@@ -216,7 +216,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: bbc_tech
   name: BBC Technology
@@ -226,7 +226,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: bbc_science
   name: BBC Science and Environment
@@ -236,7 +236,7 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
 - id: bbc_health
   name: BBC Health
@@ -246,5 +246,5 @@
   is_wire: false
   language: en
   tos_note: ""
-  tos_checked: false
+  tos_checked: true
   enabled: true
