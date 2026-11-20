@@ -15,3 +15,4 @@
 - Added cosine embedding blocking, sparse average-linkage clustering, story tracking, and static publishing.
 - Added a live story list and detail dialog.
 - Changed the pipeline schedule to every 8 hours.
+- Fixed pipeline package installation and verified a live Pages deployment.
