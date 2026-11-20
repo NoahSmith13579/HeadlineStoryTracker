@@ -45,7 +45,7 @@ jobs:
       - name: Run pipeline
         working-directory: main
         env:
-          DATA_DIR: ../data
+          DATA_DIR: ../data/data
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow enable pipeline.yml || true
