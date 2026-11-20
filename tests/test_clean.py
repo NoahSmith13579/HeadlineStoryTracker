@@ -53,6 +53,7 @@ def test_clean_title_cases(raw, clean):
         ("http://Example.COM/a?gclid=x&x=1", "http://example.com/a?x=1"),
         ("https://example.com/a?utm_campaign=x&x=1", "https://example.com/a?x=1"),
         ("https://example.com/a?ref=123", "https://example.com/a"),
+        ("javascript:alert(1)", ""),
     ],
 )
 def test_canonicalize_url(raw, canonical):

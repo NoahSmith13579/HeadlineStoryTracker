@@ -18,3 +18,5 @@
 - Fixed pipeline package installation and verified a live Pages deployment.
 - Set the pipeline schedule to hourly at minute 30 after no scheduled event appeared.
 - Clamped cosine-derived distances to prevent floating-point scores above 1 from breaking clustering.
+- Filtered embedding and clustering inputs to the 72-hour window, persisted story tracking state on `data`, and excluded temporary embedding artifacts from data-branch commits.
+- Corrected medoid embedding alignment, c-TF-IDF keywords, stable first-seen timestamps, merge/split/archive handling, and clustering health metrics.

@@ -44,7 +44,7 @@ The ML core is a **learned pairwise same-story classifier**, P(same story | head
 | Classical models | scikit-learn, LightGBM, SHAP (offline only). Isotonic calibration. |
 | Cross-encoder | MiniLM-class model fine-tuned offline in Colab. Weights are a GitHub Release asset that the workflow downloads and caches. Not stored in git. |
 | Clustering | `scipy.cluster.hierarchy` average linkage on distance = 1 - P, run per connected component of the candidate-pair graph (never a full N x N matrix). |
-| Schedules | `pipeline.yml` every 30 minutes (`*/30 * * * *`, configurable). `weekly.yml` on Sundays. Cron can run late, so every stage must be idempotent. Use a `concurrency` group so runs never overlap. |
+| Schedules | `pipeline.yml` hourly at minute 30 UTC (`30 * * * *`, configurable). `weekly.yml` on Sundays. Cron can run late, so every stage must be idempotent. Use a `concurrency` group so runs never overlap. |
 | Keepalive | Scheduled workflows on public repos are disabled after 60 days without repository activity. Add a keepalive step (for example re-enabling the workflow with `gh workflow enable`, or a pinned keepalive action) and verify it works during the first month. |
 | Legal and ethics | Store headline, URL, source, timestamps only. Respect each feed's terms and robots.txt. Send a descriptive User-Agent that includes the repo URL. |
 
@@ -401,7 +401,7 @@ End every phase with a report containing: phase and date; what was built; comman
 | `runtime_budget_minutes` | 10 |
 | `scoring_fallback_minutes` | 8 |
 | `active_model` | `baseline` until the Phase 7 promotion |
-| `pipeline_cron` | `*/30 * * * *` |
+| `pipeline_cron` | `30 * * * *` |
 
 ## Appendix C: Pitfall checklist
 

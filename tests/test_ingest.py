@@ -2,8 +2,9 @@ from pathlib import Path
 
 import feedparser
 import httpx
+import pytest
 
-from hst.ingest import append_records, fetch_feed, prune_headlines, read_existing
+from hst.ingest import append_records, fetch_feed, prune_headlines, read_existing, run_ingest
 from hst.schemas import HeadlineRecord, SourceConfig
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -88,3 +89,9 @@ def test_prune_removes_old_daily_files(tmp_path):
     assert prune_headlines(tmp_path, 60) == 1
     assert not old.exists()
     assert recent.exists()
+
+
+def test_ingest_fails_if_no_feed_succeeds(tmp_path, monkeypatch):
+    monkeypatch.setattr("hst.ingest.load_sources", lambda _path: [])
+    with pytest.raises(RuntimeError, match="no enabled feeds succeeded"):
+        run_ingest(tmp_path)

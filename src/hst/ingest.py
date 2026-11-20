@@ -132,6 +132,8 @@ def run_ingest(
     state_dir = data_path / "state"
     state_dir.mkdir(parents=True, exist_ok=True)
     sources = [source for source in load_sources(sources_path) if source.enabled]
+    if prune:
+        prune_headlines(data_path, retention_days)
     feed_state_path = state_dir / "feed_state.json"
     feed_state = (
         json.loads(feed_state_path.read_text(encoding="utf-8"))
@@ -150,6 +152,10 @@ def run_ingest(
                 status, content, response_headers = fetch_feed(client, source, feed_state)
                 if status == 304:
                     saved = feed_state.get(source.id, {})
+                    feed_state[source.id] = {
+                        **saved,
+                        "consecutive_failures": 0,
+                    }
                     feed_health.append({
                         "id": source.id,
                         "status": "not_modified",
@@ -243,9 +249,6 @@ def run_ingest(
         encoding="utf-8",
     )
 
-    if prune:
-        prune_headlines(data_path, retention_days)
-
     records_for_quality = all_new
     quality = {
         "null_timestamp_rate": (
@@ -282,4 +285,6 @@ def run_ingest(
     history_path = state_dir / "health_history.jsonl"
     with history_path.open("a", encoding="utf-8") as stream:
         stream.write(json.dumps(health, ensure_ascii=False) + "\n")
+    if health["run"]["n_feeds_ok"] == 0:
+        raise RuntimeError("ingest failed: no enabled feeds succeeded")
     return health

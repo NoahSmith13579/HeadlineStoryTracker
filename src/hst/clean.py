@@ -33,6 +33,8 @@ def clean_title(title: str) -> str:
 
 def canonicalize_url(url: str) -> str:
     parsed = urlsplit(url.strip())
+    if parsed.scheme.lower() not in {"http", "https"} or not parsed.hostname:
+        return ""
     host = (parsed.hostname or "").lower()
     if parsed.port:
         netloc = f"{host}:{parsed.port}"

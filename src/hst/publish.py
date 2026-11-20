@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 from collections import Counter
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from pathlib import Path
 
 from hst.schemas import StoriesFile, StoryHeadline, StoryObject
+from hst.window import headlines_in_window
 
 
 def read_headlines(data_dir: str | Path) -> list[dict]:
@@ -22,26 +24,58 @@ def read_headlines(data_dir: str | Path) -> list[dict]:
     return records
 
 
-def medoid(cluster: list[dict], embeddings) -> dict:
+def medoid(
+    cluster: list[dict],
+    embeddings,
+    embedding_positions: dict[str, int] | None = None,
+) -> dict:
     if not cluster:
         return {}
     positions = {record["id"]: i for i, record in enumerate(cluster)}
     if embeddings is None:
         return sorted(cluster, key=lambda record: (record["source_id"], record["title_clean"]))[0]
-    selected = embeddings[list(positions.values())]
+    if embedding_positions is None:
+        embedding_positions = positions
+    missing = [record["id"] for record in cluster if record["id"] not in embedding_positions]
+    if missing:
+        raise ValueError(f"{len(missing)} story headlines have no embedding position")
+    selected = embeddings[[embedding_positions[record["id"]] for record in cluster]]
     scores = selected @ selected.T
     index = int(scores.sum(axis=1).argmax())
     return cluster[index]
 
 
-def keywords_for_story(cluster: list[dict]) -> list[str]:
-    counter: Counter[str] = Counter()
-    for record in cluster:
-        words = re.findall(r"[A-Za-z][A-Za-z0-9'-]{3,}", record["title_clean"].lower())
-        counter.update(word for word in words if word not in {
-            "about", "after", "says", "with", "from", "that", "have", "will",
-        })
-    return [word for word, _count in counter.most_common(5)]
+def keywords_by_story(stories: list[list[dict]]) -> list[list[str]]:
+    stopwords = {
+        "about", "after", "says", "with", "from", "that", "have", "will",
+    }
+    story_terms = []
+    document_frequency: Counter[str] = Counter()
+    for story in stories:
+        terms = Counter(
+            word
+            for record in story
+            for word in re.findall(r"[A-Za-z][A-Za-z0-9'-]{3,}", record["title_clean"].lower())
+            if word not in stopwords
+        )
+        story_terms.append(terms)
+        document_frequency.update(terms.keys())
+
+    n_stories = len(story_terms)
+    keywords = []
+    for terms in story_terms:
+        total_terms = sum(terms.values())
+        if not total_terms:
+            keywords.append([])
+            continue
+        scores = {
+            term: count / total_terms * math.log1p(n_stories / document_frequency[term])
+            for term, count in terms.items()
+        }
+        keywords.append(
+            sorted(scores, key=lambda term: (-scores[term], term))[:5]
+        )
+    return keywords
 
 
 def recency_weight(record: dict, now: datetime) -> float:
@@ -63,6 +97,7 @@ def publish(
     tracked_stories: list[dict],
     embeddings,
     window_hours: int = 72,
+    embedding_ids: list[str] | None = None,
 ) -> dict:
     data_path = Path(data_dir)
     site_path = Path(site_dir)
@@ -71,29 +106,35 @@ def publish(
     record_by_id = {record["id"]: record for record in all_records}
 
     now = datetime.now(UTC)
-    cutoff = now - timedelta(hours=window_hours)
-    in_window = []
-    for record in all_records:
-        timestamp = record.get("published_at") or record.get("first_seen_at")
-        try:
-            seen = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
-            if seen.tzinfo is None:
-                seen = seen.replace(tzinfo=UTC)
-            if seen >= cutoff:
-                in_window.append(record)
-        except (AttributeError, ValueError):
-            in_window.append(record)
+    in_window = headlines_in_window(all_records, window_hours, now)
 
     tracked_by_members = {
         frozenset(record["members"]): record
         for record in tracked_stories
     }
+    embedding_positions = (
+        {headline_id: index for index, headline_id in enumerate(embedding_ids)}
+        if embedding_ids is not None
+        else None
+    )
     story_objects: list[StoryObject] = []
-    for cluster in sorted(clusters, key=lambda group: group[0]):
-        members = [record_by_id[member] for member in cluster if member in record_by_id]
+    story_recency_scores: dict[str, float] = {}
+    window_ids = {record["id"] for record in in_window}
+    ordered_clusters = sorted(clusters, key=lambda group: group[0])
+    cluster_records = [
+        [record_by_id[member] for member in cluster if member in record_by_id]
+        for cluster in ordered_clusters
+    ]
+    story_keywords = keywords_by_story(cluster_records)
+    for cluster, members, keywords in zip(
+        ordered_clusters,
+        cluster_records,
+        story_keywords,
+        strict=True,
+    ):
         if not members:
             continue
-        title_record = medoid(members, embeddings)
+        title_record = medoid(members, embeddings, embedding_positions)
         sources = sorted({member["source_id"] for member in members})
         timestamps = [
             member["published_at"] or member["first_seen_at"]
@@ -128,9 +169,9 @@ def publish(
         story_objects.append(StoryObject(
             story_id=story_id,
             title=title_record["title_clean"],
-            keywords=keywords_for_story(members),
-            first_seen=min(ordered_timestamps),
-            last_seen=max(ordered_timestamps),
+            keywords=keywords,
+            first_seen=tracked.get("first_seen", min(ordered_timestamps)),
+            last_seen=tracked.get("last_seen", max(ordered_timestamps)),
             n_headlines=len(members),
             n_sources=len(sources),
             sources=sources,
@@ -140,37 +181,40 @@ def publish(
             split_from=tracked.get("split_from"),
             forecast=None,
         ))
+        story_recency_scores[story_id] = sum(
+            recency_weight(record, now)
+            for record in members
+            if record["id"] in window_ids
+        )
 
     story_objects.sort(
         key=lambda story: (
-            sum(recency_weight(record, now) for record in in_window
-                if record["id"] in {
-                    headline.id for headline in story.headlines
-                }),
+            story_recency_scores[story.story_id],
             story.n_headlines,
             story.last_seen,
         ),
         reverse=True,
     )
     top_stories = story_objects[:100]
-    payload = StoriesFile(
-        generated_at=now.isoformat(timespec="seconds").replace("+00:00", "Z"),
-        window_hours=window_hours,
-        model_version="cosine-baseline",
-        n_headlines_in_window=len(in_window),
-        n_stories=len(top_stories),
-        stories=top_stories,
-    ).model_dump(mode="json")
-
     data_output = site_path / "data"
     data_output.mkdir(parents=True, exist_ok=True)
     stories_path = data_output / "stories.json"
-    stories_path.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
-    if stories_path.stat().st_size > 500 * 1024:
-        top_stories = top_stories[:50]
-        payload["stories"] = top_stories
-        payload["n_stories"] = len(top_stories)
-        stories_path.write_text(json.dumps(payload, ensure_ascii=False) + "\n", encoding="utf-8")
+    while True:
+        payload = StoriesFile(
+            generated_at=now.isoformat(timespec="seconds").replace("+00:00", "Z"),
+            window_hours=window_hours,
+            model_version="cosine-baseline",
+            n_headlines_in_window=len(in_window),
+            n_stories=len(top_stories),
+            stories=top_stories,
+        ).model_dump(mode="json")
+        serialized = json.dumps(payload, ensure_ascii=False) + "\n"
+        if len(serialized.encode("utf-8")) <= 500 * 1024:
+            break
+        if not top_stories:
+            raise ValueError("stories.json metadata exceeds the 500 KB publishing limit")
+        top_stories.pop()
+    stories_path.write_text(serialized, encoding="utf-8")
 
     detail_dir = data_output / "stories"
     detail_dir.mkdir(parents=True, exist_ok=True)

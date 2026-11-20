@@ -27,117 +27,197 @@ def track_clusters(
     minimum_overlap: float = 0.5,
     now: datetime | None = None,
     death_hours: int = 72,
+    first_seen_by_id: dict[str, str] | None = None,
 ) -> tuple[list[dict], dict]:
     path = Path(state_path)
-    state = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"stories": {}}
+    state = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
     old_stories = state.get("stories", {})
+    archived = state.get("archived", {})
     current_time = now or datetime.now(UTC)
-    old_ids = list(old_stories)
-    new_clusters = [set(cluster) for cluster in clusters]
-    matches: list[tuple[int, str, float]] = []
-    if old_ids and new_clusters:
-        scores = [
-            [
-                jaccard(set(old_stories[old_id].get("members", [])), cluster)
-                for cluster in new_clusters
-            ]
-            for old_id in old_ids
+    if current_time.tzinfo is None:
+        current_time = current_time.replace(tzinfo=UTC)
+    current_time = current_time.astimezone(UTC)
+    timestamp = current_time.isoformat(timespec="seconds").replace("+00:00", "Z")
+    cutoff = current_time - timedelta(hours=death_hours)
+    first_seen_by_id = first_seen_by_id or {}
+
+    active_ids = []
+    for old_id, record in old_stories.items():
+        last_seen = record.get("last_seen")
+        if last_seen:
+            try:
+                parsed = datetime.fromisoformat(last_seen.replace("Z", "+00:00"))
+                if parsed.tzinfo is None:
+                    parsed = parsed.replace(tzinfo=UTC)
+                if parsed < cutoff:
+                    expired = dict(record)
+                    expired.update({
+                        "alive": False,
+                        "archived_at": timestamp,
+                        "archive_reason": "inactive",
+                    })
+                    archived[old_id] = expired
+                    continue
+            except ValueError:
+                pass
+        active_ids.append(old_id)
+
+    old_members = {
+        old_id: set(old_stories[old_id].get("members", []))
+        for old_id in active_ids
+    }
+    new_members = [set(cluster) for cluster in clusters]
+    scores = [
+        [jaccard(old_members[old_id], cluster) for cluster in new_members]
+        for old_id in active_ids
+    ]
+
+    primary_matches: set[tuple[int, int]] = set()
+    if active_ids and new_members:
+        rows, columns = linear_sum_assignment([[-score for score in row] for row in scores])
+        primary_matches = {
+            (int(row), int(column))
+            for row, column in zip(rows, columns, strict=True)
+            if scores[row][column] >= minimum_overlap
+        }
+
+    keeper_by_old: dict[str, int] = {}
+    for row, old_id in enumerate(active_ids):
+        overlapping_columns = [
+            column for column, cluster in enumerate(new_members)
+            if old_members[old_id] & cluster
         ]
-        rows, cols = linear_sum_assignment([[-score for score in row] for row in scores])
-        for row, col in zip(rows, cols, strict=True):
-            if scores[row][col] >= minimum_overlap:
-                matches.append((int(col), old_ids[row], scores[row][col]))
-
-    # Add every qualified old-story match for merge detection. A one-to-one
-    # Hungarian match may represent only one branch of a merge or split.
-    for col, cluster in enumerate(new_clusters):
-        for _row, old_id in enumerate(old_ids):
-            score = jaccard(set(old_stories[old_id].get("members", [])), cluster)
-            if score >= minimum_overlap:
-                already_matched = any(
-                    match_col == col and match_old == old_id
-                    for match_col, match_old, _ in matches
-                )
-                if not already_matched:
-                    matches.append((col, old_id, score))
-
-    old_to_new: dict[str, list[int]] = {}
-    new_to_old: dict[int, list[str]] = {}
-    for col, old_id, _score in matches:
-        old_to_new.setdefault(old_id, []).append(col)
-        new_to_old.setdefault(col, []).append(old_id)
+        qualified_columns = [
+            column for column in overlapping_columns
+            if scores[row][column] >= minimum_overlap
+        ]
+        if qualified_columns:
+            keeper_by_old[old_id] = max(
+                qualified_columns,
+                key=lambda column: (
+                    len(old_members[old_id] & new_members[column]),
+                    (row, column) in primary_matches,
+                    -column,
+                ),
+            )
+        elif len(overlapping_columns) > 1:
+            keeper_by_old[old_id] = max(
+                overlapping_columns,
+                key=lambda column: (
+                    len(old_members[old_id] & new_members[column]),
+                    (row, column) in primary_matches,
+                    -column,
+                ),
+            )
 
     next_stories: dict[str, dict] = {}
-    for col, cluster in enumerate(new_clusters):
-        old_matches = new_to_old.get(col, [])
-        if old_matches:
-            largest_old = max(
-                old_matches,
-                key=lambda old_id: len(old_stories[old_id].get("members", [])),
+    current_stories: list[dict] = []
+    consumed_old: set[str] = set()
+    for column, cluster in enumerate(new_members):
+        surviving_ids = [
+            old_id for old_id, keeper_column in keeper_by_old.items()
+            if keeper_column == column
+        ]
+        survivor = None
+        if surviving_ids:
+            survivor = max(
+                surviving_ids,
+                key=lambda old_id: (
+                    len(old_members[old_id]),
+                    old_id,
+                ),
             )
-            record = dict(old_stories[largest_old])
+            consumed_old.update(surviving_ids)
+
+        if survivor is not None:
+            record = dict(old_stories[survivor])
             record.update({
                 "members": sorted(cluster),
                 "alive": True,
-                "last_seen": current_time.isoformat().replace("+00:00", "Z"),
-                "merged_from": (
-                    sorted(old_id for old_id in old_matches if old_id != largest_old)
+                "first_seen": record.get("first_seen") or min(
+                    (first_seen_by_id[item] for item in cluster if item in first_seen_by_id),
+                    default=timestamp,
                 ),
+                "last_seen": timestamp,
+                "merged_from": sorted(old_id for old_id in surviving_ids if old_id != survivor),
                 "split_from": None,
             })
-            next_stories[largest_old] = record
+            for merged_id in record["merged_from"]:
+                merged = dict(old_stories[merged_id])
+                merged.update({
+                    "alive": False,
+                    "archived_at": timestamp,
+                    "archive_reason": "merged",
+                    "merged_into": survivor,
+                })
+                archived[merged_id] = merged
+            story_key = survivor
         else:
-            new_id = story_id(sorted(cluster))
-            next_stories[new_id] = {
+            split_parents = [
+                old_id for old_id, old_cluster in old_members.items()
+                if (
+                    old_cluster & cluster
+                    and len([
+                        candidate for candidate in new_members
+                        if old_cluster & candidate
+                    ]) > 1
+                    and keeper_by_old.get(old_id) != column
+                )
+            ]
+            parent = max(
+                split_parents,
+                key=lambda old_id: (len(old_members[old_id] & cluster), old_id),
+                default=None,
+            )
+            story_key = story_id(sorted(cluster))
+            record = {
                 "members": sorted(cluster),
                 "alive": True,
-                "last_seen": current_time.isoformat().replace("+00:00", "Z"),
+                "first_seen": min(
+                    (first_seen_by_id[item] for item in cluster if item in first_seen_by_id),
+                    default=timestamp,
+                ),
+                "last_seen": timestamp,
                 "merged_from": [],
-                "split_from": None,
+                "split_from": parent,
             }
 
-    # One old story matching multiple new clusters is a split.
-    for old_id, cols in old_to_new.items():
-        if len(cols) > 1:
-            largest_col = max(cols, key=lambda col: len(new_clusters[col]))
-            next_stories[old_id]["split_from"] = None
-            for col in cols:
-                if col == largest_col:
-                    continue
-                piece = new_clusters[col]
-                new_id = story_id(sorted(piece))
-                next_stories[new_id] = {
-                    "members": sorted(piece),
-                    "alive": True,
-                    "last_seen": current_time.isoformat().replace("+00:00", "Z"),
-                    "merged_from": [],
-                    "split_from": old_id,
-                }
+        next_stories[story_key] = record
+        current_stories.append({"story_id": story_key, **record})
 
-    matched_old = set(old_to_new)
-    cutoff = current_time - timedelta(hours=death_hours)
+    previous_present = {
+        old_id
+        for old_id, members in old_members.items()
+        if any(members & cluster for cluster in new_members)
+    }
+    current_ids = {story["story_id"] for story in current_stories}
+    kept_ids = previous_present & current_ids
+    id_persistence = len(kept_ids) / len(previous_present) if previous_present else 1.0
+
     for old_id, record in old_stories.items():
-        if old_id in matched_old:
+        if old_id in consumed_old:
+            continue
+        if old_id in archived:
             continue
         last_seen = record.get("last_seen")
-        if not last_seen:
-            continue
-        try:
-            parsed = datetime.fromisoformat(last_seen.replace("Z", "+00:00"))
-            if parsed.tzinfo is None:
-                parsed = parsed.replace(tzinfo=UTC)
-            if parsed >= cutoff:
-                archived = dict(record)
-                archived["alive"] = False
-                next_stories[old_id] = archived
-        except ValueError:
-            continue
+        if last_seen:
+            try:
+                parsed = datetime.fromisoformat(last_seen.replace("Z", "+00:00"))
+                if parsed.tzinfo is None:
+                    parsed = parsed.replace(tzinfo=UTC)
+                if parsed < cutoff:
+                    continue
+            except ValueError:
+                pass
+        inactive = dict(record)
+        inactive["alive"] = False
+        next_stories[old_id] = inactive
 
-    state = {"stories": next_stories}
+    new_state = {
+        "stories": next_stories,
+        "archived": archived,
+        "id_persistence": id_persistence,
+    }
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    output = [
-        {"story_id": story_id_value, **record}
-        for story_id_value, record in sorted(next_stories.items())
-    ]
-    return output, state
+    path.write_text(json.dumps(new_state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return current_stories, new_state

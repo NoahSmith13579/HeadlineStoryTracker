@@ -4,7 +4,7 @@
 
 ## 1. The project in one page
 
-**What it is.** A live news story tracker. Every 30 minutes a GitHub Action pulls headlines from 25-40 outlets, groups them into stories (all headlines about the same real-world event), keeps story identities stable over time, and publishes static JSON to a GitHub Pages site. There is no backend. GitHub Actions is the compute, git is the database, and the visitor's browser is the only runtime for the site.
+**What it is.** A live news story tracker. Every hour at minute 30 UTC, a GitHub Action pulls headlines from 25-40 outlets, groups them into stories (all headlines about the same real-world event), keeps story identities stable over time, and publishes static JSON to a GitHub Pages site. There is no backend. GitHub Actions is the compute, git is the database, and the visitor's browser is the only runtime for the site.
 
 **The research question.** Can a learned same-story model beat off-the-shelf embedding similarity on near-miss stories, and how quickly does it decay as news vocabulary drifts? Everything else in the project exists to answer this credibly.
 
@@ -20,7 +20,7 @@
 
 ```
 RSS feeds (25-40 outlets)
-        |  every 30 min, GitHub Actions cron
+        |  hourly at :30 UTC, GitHub Actions cron
         v
  ingest -> clean -> headlines/YYYY-MM-DD.jsonl      (data branch)
         |
@@ -44,7 +44,7 @@ RSS feeds (25-40 outlets)
 
 | Component | Runs on | When | Produces |
 | --- | --- | --- | --- |
-| Ingest, cluster, publish | GitHub Actions | every 30 minutes | headline files on `data`, site JSON on Pages |
+| Ingest, cluster, publish | GitHub Actions | hourly at minute 30 UTC | headline files on `data`, site JSON on Pages |
 | Retrain and evaluate | GitHub Actions | weekly | `metrics.json`, a candidate model |
 | Cross-encoder fine-tuning | Colab GPU | when you run it | weights as a release asset |
 | Labeling | Your browser, local | when you label | gold files in `eval/gold/` |

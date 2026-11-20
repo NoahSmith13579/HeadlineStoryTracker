@@ -9,3 +9,4 @@
 | 2026-11-19 | Use `langdetect` with `SEED = 1337` for fixed-seed language detection. | It provides deterministic fixed-seed detection and marks malformed or short text as `und`. |
 | 2026-11-19 | Initially schedule the pipeline every 8 hours rather than every 30 minutes. | This reflected the owner's lower-frequency operational preference. |
 | 2026-11-20 | Schedule the pipeline hourly at minute 30. | The owner requested hourly runs to reduce uncertainty around observing the schedule; minute 30 also avoids top-of-hour congestion. |
+| 2026-11-20 | Limit embedding and clustering to the configured rolling window and keep generated embeddings/intermediate files in runner temporary storage. | Prevents unbounded work and ensures generated vectors/caches are never committed to the data branch. |

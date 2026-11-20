@@ -49,16 +49,27 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow enable pipeline.yml || true
-          python -m hst ingest --data-dir "$DATA_DIR"
-          python -m hst embed --data-dir "$DATA_DIR"
-          python -m hst cluster --data-dir "$DATA_DIR"
-          python -m hst publish --data-dir "$DATA_DIR"
+          python -m hst ingest --prune --data-dir "$DATA_DIR"
+          python -m hst embed --data-dir "$DATA_DIR" \
+            --cache "$RUNNER_TEMP/hst-embedding-cache.json" \
+            --output "$RUNNER_TEMP/hst-embeddings.npy"
+          python -m hst cluster --data-dir "$DATA_DIR" \
+            --embeddings "$RUNNER_TEMP/hst-embeddings.npy" \
+            --state "$DATA_DIR/state/stories_state.json" \
+            --output "$RUNNER_TEMP/hst-clusters.json"
+          python -m hst publish --data-dir "$DATA_DIR" \
+            --embeddings "$RUNNER_TEMP/hst-embeddings.npy" \
+            --cluster-output "$RUNNER_TEMP/hst-clusters.json"
       - name: Commit data
         working-directory: data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data state
+          git add data/headlines \
+            data/state/feed_state.json \
+            data/state/stories_state.json \
+            data/state/health.json \
+            data/state/health_history.jsonl
           git diff --cached --quiet || git commit -m "Update headline data and pipeline state"
           git push origin data || (git fetch origin data && git rebase origin/data && git push origin data)
       - uses: actions/configure-pages@v5
