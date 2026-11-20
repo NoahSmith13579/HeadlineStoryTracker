@@ -16,5 +16,5 @@
 - Added a live story list and detail dialog.
 - Changed the pipeline schedule to every 8 hours.
 - Fixed pipeline package installation and verified a live Pages deployment.
-- Moved the 8-hour schedule to minute 17 after no scheduled event appeared.
+- Set the pipeline schedule to hourly at minute 30 after no scheduled event appeared.
 - Clamped cosine-derived distances to prevent floating-point scores above 1 from breaking clustering.
