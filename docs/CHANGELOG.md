@@ -16,3 +16,4 @@
 - Added a live story list and detail dialog.
 - Changed the pipeline schedule to every 8 hours.
 - Fixed pipeline package installation and verified a live Pages deployment.
+- Moved the 8-hour schedule to minute 17 after no scheduled event appeared.
