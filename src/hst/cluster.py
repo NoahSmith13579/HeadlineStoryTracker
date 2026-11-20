@@ -51,8 +51,9 @@ def cluster_headlines(
         np.fill_diagonal(distance, 0.0)
         for (a_id, b_id), score in candidate_scores.items():
             if a_id in positions and b_id in positions:
-                distance[positions[a_id], positions[b_id]] = 1.0 - score
-                distance[positions[b_id], positions[a_id]] = 1.0 - score
+                pair_distance = float(np.clip(1.0 - score, 0.0, 2.0))
+                distance[positions[a_id], positions[b_id]] = pair_distance
+                distance[positions[b_id], positions[a_id]] = pair_distance
         if np.max(distance) <= 0:
             labels.append(component)
             continue

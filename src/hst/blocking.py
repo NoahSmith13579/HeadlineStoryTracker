@@ -33,7 +33,7 @@ def find_candidates(
                 pairs[(a, b)] = {
                     "a_id": a,
                     "b_id": b,
-                    "cosine": float(similarities[i, j]),
+                    "cosine": float(np.clip(similarities[i, j], -1.0, 1.0)),
                     "time_gap_hours": gap_s / 3600.0,
                 }
                 kept += 1

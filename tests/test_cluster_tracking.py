@@ -19,6 +19,13 @@ def test_cluster_baseline_keeps_near_pairs_separate():
     assert ["c"] in clusters
 
 
+def test_cluster_clamps_cosine_rounding_above_one():
+    pairs = [
+        {"a_id": "a", "b_id": "b", "cosine": 1.0000001, "time_gap_hours": 1},
+    ]
+    assert cluster_headlines(["a", "b"], pairs, 0.65) == [["a", "b"]]
+
+
 def test_tracking_continuation(tmp_path):
     state = tmp_path / "stories.json"
     state.write_text(
