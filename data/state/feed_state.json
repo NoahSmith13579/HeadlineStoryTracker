@@ -2,72 +2,72 @@
   "bbc_world": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "bbc_us": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "bbc_politics": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "npr": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "nyt_home": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "nyt_world": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "guardian_world": {
-    "etag": "W/\"hash-5473993503717652988\"",
+    "etag": "W/\"hash9152258951472441826\"",
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "guardian_us": {
-    "etag": "W/\"hash-1310786713880038371\"",
+    "etag": "W/\"hash6276741085590784362\"",
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "aljazeera": {
-    "etag": "W/\"8362d90ae80b1577aa52362755e672bf\"",
-    "last_modified": "Tue, 24 Nov 2026 00:45:00 GMT",
-    "last_success": "2026-11-24T01:05:50Z"
+    "etag": "W/\"23f039f99afe5550e559568ebf20c5e7\"",
+    "last_modified": "Tue, 24 Nov 2026 11:03:16 GMT",
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "cnn": {
     "etag": null,
     "last_modified": "Thu, 22 Aug 2024 15:19:24 GMT",
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "abc": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "cbs": {
     "etag": null,
-    "last_modified": "Tue, 24 Nov 2026 01:04:33 GMT",
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_modified": "Tue, 24 Nov 2026 11:10:30 GMT",
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "fox": {
-    "etag": "89ad81c53bab62ca186ad6c23992ae59",
+    "etag": "015e276221f8cf7aa59db3bc938fa95a",
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "dw": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "france24": {
     "etag": null,
@@ -77,51 +77,51 @@
   "nbc": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "pbs": {
-    "etag": "W/\"f4aa6ee1346f6e5d24fba47db94e1d08\"",
-    "last_modified": "Tue, 24 Nov 2026 00:58:08 GMT",
-    "last_success": "2026-11-24T01:05:50Z"
+    "etag": "W/\"386661c108483d04feb92fb237fc8e79\"",
+    "last_modified": "Tue, 24 Nov 2026 11:05:05 GMT",
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "propublica": {
-    "etag": "W/\"e23f44b02026eab9a5a071738c3a8bbd\"",
-    "last_modified": "Mon, 23 Nov 2026 17:59:50 GMT",
-    "last_success": "2026-11-24T01:05:50Z"
+    "etag": "W/\"cef6546340ffbf4b5045eed45f5fc35a\"",
+    "last_modified": "Tue, 24 Nov 2026 00:49:52 GMT",
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "politico": {
     "etag": null,
-    "last_modified": "Tue, 24 Nov 2026 01:04:59 GMT",
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_modified": "Tue, 24 Nov 2026 11:13:50 GMT",
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "thehill": {
-    "etag": "W/\"212dbd8305a85e1872ea743b6c091474\"",
-    "last_modified": "Tue, 24 Nov 2026 00:48:35 GMT",
-    "last_success": "2026-11-24T01:05:50Z"
+    "etag": "W/\"e59245f88a7cea2f69704304479a5fd8\"",
+    "last_modified": "Tue, 24 Nov 2026 11:00:57 GMT",
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "time": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "sky_news": {
-    "etag": "W/\"f1bae795fd9af268e65fed3d83033cb944a90506a042038950f31110f0049d0e\"",
+    "etag": "W/\"f73c01b515219025dbb44ec68b0245204c815835aaaa6a5e1a7c259ddcadc84d\"",
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "bbc_tech": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "bbc_science": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   },
   "bbc_health": {
     "etag": null,
     "last_modified": null,
-    "last_success": "2026-11-24T01:05:50Z"
+    "last_success": "2026-11-24T11:14:26Z"
   }
 }
