@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-11-24T21:26:43Z",
+  "generated_at": "2026-11-25T04:24:47Z",
   "run": {
-    "duration_s": 4.91,
-    "n_new_headlines": 325,
+    "duration_s": 3.742,
+    "n_new_headlines": 173,
     "n_feeds_ok": 24,
     "n_feeds_total": 24
   },
@@ -11,91 +11,91 @@
       "id": "bbc_world",
       "status": "ok",
       "http_status": 200,
-      "items": 31,
-      "new_items": 10,
-      "latency_ms": 343,
+      "items": 37,
+      "new_items": 12,
+      "latency_ms": 462,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "bbc_us",
       "status": "ok",
       "http_status": 200,
-      "items": 23,
-      "new_items": 5,
-      "latency_ms": 54,
+      "items": 28,
+      "new_items": 4,
+      "latency_ms": 20,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "bbc_politics",
       "status": "ok",
       "http_status": 200,
       "items": 62,
-      "new_items": 12,
-      "latency_ms": 299,
+      "new_items": 2,
+      "latency_ms": 43,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "npr",
       "status": "ok",
       "http_status": 200,
       "items": 10,
-      "new_items": 5,
-      "latency_ms": 62,
+      "new_items": 0,
+      "latency_ms": 280,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "nyt_home",
       "status": "ok",
       "http_status": 200,
-      "items": 19,
-      "new_items": 14,
-      "latency_ms": 72,
+      "items": 20,
+      "new_items": 10,
+      "latency_ms": 104,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "nyt_world",
       "status": "ok",
       "http_status": 200,
       "items": 57,
-      "new_items": 11,
-      "latency_ms": 454,
+      "new_items": 2,
+      "latency_ms": 38,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "guardian_world",
       "status": "ok",
       "http_status": 200,
       "items": 45,
-      "new_items": 24,
-      "latency_ms": 142,
+      "new_items": 14,
+      "latency_ms": 134,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "guardian_us",
       "status": "ok",
       "http_status": 200,
       "items": 33,
-      "new_items": 18,
-      "latency_ms": 120,
+      "new_items": 4,
+      "latency_ms": 49,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "aljazeera",
       "status": "ok",
       "http_status": 200,
       "items": 25,
-      "new_items": 25,
-      "latency_ms": 215,
+      "new_items": 19,
+      "latency_ms": 163,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "cnn",
@@ -103,29 +103,29 @@
       "http_status": 200,
       "items": 69,
       "new_items": 0,
-      "latency_ms": 437,
+      "latency_ms": 192,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "abc",
       "status": "ok",
       "http_status": 200,
       "items": 25,
-      "new_items": 13,
-      "latency_ms": 159,
+      "new_items": 4,
+      "latency_ms": 187,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "cbs",
       "status": "ok",
       "http_status": 200,
       "items": 30,
-      "new_items": 26,
-      "latency_ms": 136,
+      "new_items": 24,
+      "latency_ms": 142,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "fox",
@@ -133,19 +133,19 @@
       "http_status": 200,
       "items": 25,
       "new_items": 24,
-      "latency_ms": 149,
+      "latency_ms": 171,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "dw",
       "status": "ok",
       "http_status": 200,
       "items": 143,
-      "new_items": 14,
-      "latency_ms": 122,
+      "new_items": 3,
+      "latency_ms": 195,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "nbc",
@@ -153,29 +153,29 @@
       "http_status": 200,
       "items": 25,
       "new_items": 15,
-      "latency_ms": 318,
+      "latency_ms": 363,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "pbs",
       "status": "ok",
       "http_status": 200,
       "items": 20,
-      "new_items": 17,
-      "latency_ms": 195,
+      "new_items": 10,
+      "latency_ms": 170,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "propublica",
       "status": "ok",
       "http_status": 200,
       "items": 20,
-      "new_items": 0,
-      "latency_ms": 412,
+      "new_items": 1,
+      "latency_ms": 193,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "politico",
@@ -183,39 +183,39 @@
       "http_status": 200,
       "items": 30,
       "new_items": 0,
-      "latency_ms": 167,
+      "latency_ms": 164,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "thehill",
       "status": "ok",
       "http_status": 200,
       "items": 100,
-      "new_items": 65,
-      "latency_ms": 357,
+      "new_items": 17,
+      "latency_ms": 191,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "time",
       "status": "ok",
       "http_status": 200,
       "items": 25,
-      "new_items": 16,
-      "latency_ms": 184,
+      "new_items": 1,
+      "latency_ms": 164,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "sky_news",
       "status": "ok",
       "http_status": 200,
-      "items": 8,
+      "items": 10,
       "new_items": 3,
-      "latency_ms": 49,
+      "latency_ms": 177,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "bbc_tech",
@@ -223,40 +223,40 @@
       "http_status": 200,
       "items": 21,
       "new_items": 1,
-      "latency_ms": 47,
+      "latency_ms": 13,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "bbc_science",
       "status": "ok",
       "http_status": 200,
       "items": 42,
-      "new_items": 2,
-      "latency_ms": 79,
+      "new_items": 1,
+      "latency_ms": 20,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     },
     {
       "id": "bbc_health",
       "status": "ok",
       "http_status": 200,
       "items": 57,
-      "new_items": 5,
-      "latency_ms": 235,
+      "new_items": 2,
+      "latency_ms": 23,
       "consecutive_failures": 0,
-      "last_success": "2026-11-24T21:26:43Z"
+      "last_success": "2026-11-25T04:24:47Z"
     }
   ],
   "quality": {
     "null_timestamp_rate": 0.0,
-    "dup_rate": 0.012307692307692308,
-    "non_english_rate": 0.015384615384615385
+    "dup_rate": 0.0,
+    "non_english_rate": 0.023121387283236993
   },
   "clustering": {
-    "n_clusters": 1021,
+    "n_clusters": 1061,
     "median_size": 1,
-    "singleton_rate": 0.8276199804113614,
-    "id_persistence": 0.9397590361445783
+    "singleton_rate": 0.8143261074458058,
+    "id_persistence": 0.953
   }
 }
